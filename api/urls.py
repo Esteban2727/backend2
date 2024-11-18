@@ -17,5 +17,8 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('', views.login_view, name='login_view'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('datos/',views.datas,name='datas' )
+    path('datos/',views.datas,name='datas' ),
+   
 ]
+
+#  path('Recuperar/',views.Recuperar,name='Recuperar' )

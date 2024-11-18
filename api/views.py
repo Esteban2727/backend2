@@ -19,6 +19,20 @@ from .models import Persona
 from .serializador import PersonaSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.http import JsonResponse
+
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+
+""" @api_view(['POST'])
+def Recuperar(request):
+    subject = 'Recover password'
+   
+    print("entro", request)
+    # Renderiza una plantilla HTML y pasa datos al contexto
+    message = render_to_string('mi_plantilla_email.html', {'nombre': 'Esteban'})
+    email = EmailMessage(subject, message, 'escastr@gmail.com', ['escastr@gmail.com'])
+    email.content_subtype = 'html'  # Esto indica que el mensaje es HTML
+    email.send() """
 @api_view(['POST'])
 def register(request):
     serializer = PersonaSerializer(data=request.data)

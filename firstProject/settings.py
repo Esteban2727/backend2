@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'api',
     'corsheaders',
+    'channels',
    
 ]
 
@@ -82,6 +83,14 @@ TEMPLATES = [
     },
 ]
 
+
+ASGI_APPLICATION = 'firstProject.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
 WSGI_APPLICATION = 'firstProject.wsgi.application'
 
 REST_FRAMEWORK = {
@@ -108,6 +117,13 @@ DATABASES = {
     }
 }
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'escastr@gmail.com'
+EMAIL_HOST_PASSWORD = 'vlor ujci vfmf npnx'
+DEFAULT_FROM_EMAIL = 'escastr@gmail.com'
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
