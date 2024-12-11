@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'api',
     'corsheaders',
     'channels',
+    'rest_framework_simplejwt'
    
 ]
 
@@ -62,8 +63,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     
 ]
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 ROOT_URLCONF = 'firstProject.urls'
 
@@ -97,11 +101,21 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    
+    
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=20),  # Duración del token de acceso
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),    # Duración del token de refresco
+    'ROTATE_REFRESH_TOKENS': True,                 # Generar un nuevo refresh token en cada uso
+    'BLACKLIST_AFTER_ROTATION': True,              # Invalidar el refresh token antiguo tras rotarlo
+    'ALGORITHM': 'HS256',                          # Algoritmo usado para los tokens
+    'SIGNING_KEY': SECRET_KEY,                     # Usar la clave secreta de Django
+    'AUTH_HEADER_TYPES': ('Bearer',),              # Formato del encabezado de autorización
 }
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -117,16 +131,27 @@ DATABASES = {
     }
 }
 
+# settings.py
+# settings.py
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'escastr@gmail.com'
-EMAIL_HOST_PASSWORD = 'vlor ujci vfmf npnx'
-DEFAULT_FROM_EMAIL = 'escastr@gmail.com'
+EMAIL_HOST = 'smtp.gmail.com'  # El servidor de correo saliente
+EMAIL_PORT = 587  # Puerto del servidor de correo saliente
+EMAIL_USE_TLS = True  # Usa TLS
+EMAIL_HOST_USER = 'escastr@gmail.com'  # Tu correo electrónico
+EMAIL_HOST_PASSWORD = 'lrkq flxh aevo dazs'  # La contraseña de tu correo
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+
+
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
-
+AUTH_USER_MODEL = 'api.Persona'
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',

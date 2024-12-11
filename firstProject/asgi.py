@@ -1,23 +1,20 @@
-"""
-ASGI config for firstProject project.
-
-It exposes the ASGI callable as a module-level variable named ``application``.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/5.1/howto/deployment/asgi/
-"""
-# firstProject/asgi.py
-
 import os
+from django.core.asgi import get_asgi_application
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
-from django.core.asgi import get_asgi_application
 from api.routing import websocket_urlpatterns
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'firstProject.settings')  # Ajusta según el nombre de tu proyecto
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'firstProject.settings')
 
+# Inicializa la aplicación Django ASGI
+django_asgi_app = get_asgi_application()
+
+# Configuración del enrutador ASGI
 application = ProtocolTypeRouter({
-    "http": get_asgi_application(),
+    # HTTP se maneja a través de Django ASGI (y está configurado con WhiteNoise desde settings.py)
+    "http": django_asgi_app,
+
+    # Manejo de WebSockets
     "websocket": AuthMiddlewareStack(
         URLRouter(
             websocket_urlpatterns
